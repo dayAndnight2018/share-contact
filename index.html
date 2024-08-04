@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <meta charset="utf-8" name="viewport" 
+            content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+        <link rel="stylesheet" href="css/fontIcon.css" />
+        <link rel="stylesheet" href="css/fontAwsome.css" />
+        <link rel="stylesheet" href="css/bulma.css" />
+        <link rel="stylesheet" href="css/main.css" />
+        <script src="js/vue.js"></script>
+        <script src="js/vueResource.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/data.js"></script>
+        <script src="js/qr-code.js"></script>
+        <!-- 标题 -->
+        <title>共享名片</title>
+    </head>
+
+    <body>
+        <div id="app" class="container has-text-centered fullHeight">
+            <div class="columns has-text-centered fivePrecentMarginTop fullHeight">
+                <main class="column is-12 fullHeight mainArea">
+                    <h1 class="title is-3 has-text-centered">名片搜索</h1>
+                    
+                    <div class="columns is-centered has-text-centered is-mobile">
+                        <div class="column is-6-desktop is-7-mobile is-7-tablet has-text-centered">
+                            <input id="searchBox" class="input is-medium" placeholder="Search From Here"/>
+                        </div>
+                        <div class="column is-2-desktop is-3-mobile is-3-tablet">
+                            <button id="confirmButton" class="button is-medium">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="addressList columns is-10-desktop is-11-mobile is-10-tablet fullHeight">
+                        <ul class="guideTab column is-1-desktop is-3-mobile is-1-tablet">
+                            <li v-for="ele in guideTabListData" class="guideTabItem" v-on:click="tabSelected(ele)" :data-num="ele.num">
+                                <a>
+                                    <span>{{ele.title}}</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="guideDetailList column is-11-desktop is-9-mobile is-11-tablet">
+                            <div class="guideDetail" v-for="ele in currentGroupData" 
+                        v-show="currentGroup != null" :id="ele.name">
+                                <a v-on:click="preview(ele)"><i class="fa fa-address-card f-icon guideDetailImg" ></i></a>
+                                <div class="guideDetailContent">
+                                    <a v-on:click="preview(ele)" class="guideDetailAltWrapper">
+                                        <h3 class="guideDatilAlt">{{ele.name}}</h3>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <div class="shareCard fullHeight" v-show="shareVisible">
+                <div class="shareArea">
+                    <div class="share-title">{{shareTitle}}</div>
+                    <div id="qrCodePreviewer"></div>
+                    <div v-on:click="closeShare" class="button is-medium btn">关闭</div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            // 初始化背景色
+            setRgbColor();
+
+            var vue = new Vue({
+                el:"#app",
+                data:{
+                    guideTabListData: guideTabListData,
+                    guideTabGroupListData: guideTabGroupListData,
+                    currentGroup: null,
+                    currentGroupData: new Array,
+                    qrCode: null,
+                    shareVisible: false,
+                    shareTitle: null
+                },
+                mounted: function(){
+                    this.qrCode = new QRCode("qrCodePreviewer", {
+                            text: "https://www.runoob.com",
+                            width: 256,
+                            height: 256,
+                            colorDark : "#000000",
+                            colorLight : "#ffffff",
+                            correctLevel : QRCode.CorrectLevel.Q
+                    });
+                },
+                methods:{ 
+                    tabSelected:function(ele){
+                        this.currentGroup = ele.num;
+                        this.currentGroupData = this.guideTabGroupListData.filter((a) => a.num == this.currentGroup)[0].data;
+                    },
+                    getFaviconUrl:function(url){
+                        let domain = url.split('/'); 
+                        if(domain[0] && domain[2]) {
+                            return domain[0] + "//" +  domain[2] + '/favicon.ico';
+                        }
+                        return 'img/default.png';
+                    },
+                    preview: function(item){
+                        this.qrCode.clear();
+                        let name = item.name; 
+                        let email = item.email
+                        let ceil = item.ceil
+                        let title= item.title
+                        let company = item.company
+                        let address = item.address
+                        let template = `BEGIN:VCARD\r\nVERSION:3.0\r\nFN:${name}\r\nEMAIL:${email}\r\nTEL;TYPE=cell:${ceil}\r\nTITLE:${title}\r\nORG:${company}\r\nADR;TYPE=work:${address}\r\nEND:VCARD`
+                        this.shareTitle = item.name;
+                        this.qrCode.makeCode(template);
+                        this.shareVisible = true;
+                    },
+                    closeShare: function(){
+                        this.shareVisible = false;
+                    }
+                }
+            });
+        </script>
+
+    </body>
+
+</html>
