@@ -430,3 +430,11 @@ html{
 	font-size: 1rem;
 	font-weight: bold;
 }
+
+#qrCodePreviewer > canvas{
+	z-index:997
+}
+
+#qrCodePreviewer > img{
+	z-index:998
+}
