@@ -410,7 +410,6 @@ html{
 	height: 100%;
 	z-index: 999;
 	background: silver;
-	opacity: 0.9;
 
 	display: flex;
 	flex-direction: row;
