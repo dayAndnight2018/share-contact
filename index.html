@@ -111,7 +111,8 @@
                         let template = `BEGIN:VCARD\r\nVERSION:3.0\r\nFN:${name}\r\nEMAIL:${email}\r\nTEL;TYPE=cell:${ceil}\r\nTITLE:${title}\r\nORG:${company}\r\nADR;TYPE=work:${address}\r\nEND:VCARD`
                         this.shareTitle = item.name;
                         this.qrCode.makeCode(template);
-                        $("#qrCodePreviewer>img").attr("src", document.getElementsByTagName("canvas")[0].toDataURL("image/png"));
+                        var img = document.getElementsByTagName('canvas')[0].toDataURL("image/png").replace(/(\r\n)|(\n)|(\r)/g, "");
+                        $("#qrCodePreviewer>img").attr("src", img);
                         this.shareVisible = true;
                     },
                     closeShare: function(){
