@@ -7,7 +7,11 @@ let guideTabListData = [
     {
         title: '水电气网',
         num: 1,
-    }
+    },
+	{
+		title: '周边',
+        	num: 2,
+	}
 ];
 
 
@@ -57,4 +61,29 @@ let life = [
 	}
 ]
 
-guideTabGroupListData = guideTabGroupListData.concat(wuye, life);
+let around = [
+	{
+		num: 2,
+		data:[
+			{
+				// 联系人
+				name: '纸壳回收',
+				email: '',
+				ceil: '13013505887',
+                title: '周边',
+                company: '',
+                address:'新东关'
+			},
+			{
+				// 联系人
+				name: '上门开锁',
+				email: '',
+				ceil: '15588128057',
+                title: '周边',
+                company: '',
+                address:'新东关'
+			}
+		]
+	}
+]
+guideTabGroupListData = guideTabGroupListData.concat(wuye, life, around);
