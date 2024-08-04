@@ -57,7 +57,8 @@
             <div class="shareCard fullHeight" v-show="shareVisible">
                 <div class="shareArea">
                     <div class="share-title">{{shareTitle}}</div>
-                    <div id="qrCodePreviewer"></div>
+                    <div id="qrCodePreviewer" style="display:none"></div>
+                    <img :src="qrImage" style="width:256px;height:256px"/>
                     <div v-on:click="closeShare" class="button is-medium btn">关闭</div>
                 </div>
             </div>
@@ -76,7 +77,8 @@
                     currentGroupData: new Array,
                     qrCode: null,
                     shareVisible: false,
-                    shareTitle: null
+                    shareTitle: null,
+                    qrImage: null
                 },
                 mounted: function(){
                     this.qrCode = new QRCode("qrCodePreviewer", {
@@ -112,7 +114,7 @@
                         this.shareTitle = item.name;
                         this.qrCode.makeCode(template);
                         var img = document.getElementsByTagName('canvas')[0].toDataURL("image/png").replace(/(\r\n)|(\n)|(\r)/g, "");
-                        $("#qrCodePreviewer>img").attr("src", img);
+                        this.qrImage = img;
                         this.shareVisible = true;
                     },
                     closeShare: function(){
